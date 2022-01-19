@@ -14,6 +14,7 @@
 "use strict";
 
 const ngc = require('nodegame-client');
+const { EXECUTION_MODE } = require('../../waitroom/waitroom.settings');
 const J = ngc.JSUS;
 
 module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
@@ -88,7 +89,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         // Takes settings.CONSENT by default.
     });
 
-    stager.extendStep('instructions', {
+    stager.extendStep('introduction', {
         // Do not go back to consent.
         backbutton: false,
         // No need to specify the frame, if named after the step id.
@@ -102,92 +103,143 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
             // Replace variables in the instructions.
             W.setInnerHTML('coins', s.COINS);
             W.setInnerHTML('time', s.CONSENT.EXP_TIME);
+
+            W.setInnerHTML('treatment', s.text);
+        },
+        widget: {
+            name: 'ChoiceManager',
+            options: {
+                id: 'demo1',
+                mainText: 'Please insert the following information to generate your personalised code:',
+                simplify: true,
+                forms: [
+                    {    name: 'CustomInput',
+                        id: 'secondletter',
+                        mainText: 'Second letter of your mother\'s first name: ',
+                        type: 'text',
+                        min: 1,
+                        max: 1,
+                        shuffleChoices: false,
+                    },
+                    {
+                        name: 'CustomInput',
+                        id: 'month',
+                        mainText: 'Your birth month: ',
+                        type: 'int',
+                        min: 1,
+                        max: 12,
+                        shuffleChoices: false,
+                    },
+                    {
+                        name: 'CustomInput',
+                        id: 'secondtolastletter',
+                        mainText: 'Second to last letter of your last name: ',
+                        type: 'text',
+                        min: 1,
+                        max: 1,
+                        shuffleChoices: false,
+                    },
+                    {
+                        name: 'CustomInput',
+                        id: 'lastletter',
+                        mainText: 'Last letter of your father\'s first name: ',
+                        type: 'text',
+                        min: 1,
+                        max: 1,
+                        shuffleChoices: false,
+                    }, 
+                ],
+                formsOptions: {
+                    requiredChoice: false,
+                    shuffleChoices: false
+                },
+                className: 'centered'
+            }
         }
     });
+        
 
-    stager.extendStep('survey-demo1', {
+    stager.extendStep('sociodemographics', {
         // Make a widget step.
         widget: {
             name: 'ChoiceManager',
             options: {
                 id: 'demo1',
-                mainText: 'Your demographics.',
+                mainText: 'Questions regarding your sociodemographics.',
                 simplify: true,
                 forms: [
                     {
                         id: 'gender',
                         mainText: 'What is your gender?',
-                        choices: ['Male', 'Female', 'Other'],
+                        choices: ['Male', 'Female'],
                         shuffleChoices: false,
-                        onclick: function (value, removed) {
-                            var w;
-                            // Display Other.
-                            w = node.widgets.lastAppended.formsById.othergender;
-                            if ((value === 2) && !removed) w.show();
-                            else w.hide();
-                            // Necessary when the page changed size after
-                            // loading it
-                            W.adjustFrameHeight();
-                        },
-                        preprocess: capitalizeInput
+                        
                     },
                     {
                         name: 'CustomInput',
-                        id: 'othergender',
-                        mainText: 'Please name your gender.',
-                        width: '95%',
-                        hidden: true
-                    },
-                    {
-                        name: 'CustomInput',
-                        id: 'age',
-                        mainText: 'What is your age?',
+                        id: 'byear',
+                        mainText: 'Which year were you born in?',
                         type: 'int',
-                        min: 18,
+                        hint: '(Please insert in YYYY format)'
                         // requiredChoice: false
                     },
                     {
-                        id: 'race',
-                        selectMultiple: true,
-                        mainText: 'Do you identify with any ' +
-                            'of the following races/ethnic groups?',
-                        choices: ['White', 'African American',
-                            'Latino', 'Asian',
-                            'American Indian',
-                            'Alaska Native',
-                            'Native Hawaiian', 'Pacific Islander']
+                        name: 'CustomInput',
+                        id: 'bmonth',
+                        mainText: 'Which month were you born in?',
+                        type: 'int',
+                        hint: '(Please insert in MM format)',
+                        min: 1,
+                        max: 12,
+                        // requiredChoice: false
+                    },
+                    {
+                        id: 'schooltype',
+                        selectMultiple: false,
+                        mainText: 'What type of school do you attend?',
+                        choices: ['Hauptschule', 'Realschule',
+                            'Gymnasium'],
+                        shuffleChoices: false,
                     },
                     {
                         name: 'CustomInput',
-                        id: 'othereyes',
-                        mainText: 'Please say the color of your eyes.',
-                        width: '95%',
-                        hint: '(If more than one color, order alphabetically ' +
-                            'and unite with a dash)',
-                        preprocess: capitalizeInput
+                        id: 'grade',
+                        mainText: 'What grade level are you currently attending?',
+                        type: 'int',
+                        hint: '(Please insert the right number)',
+                        min: 5,
+                        max: 13
+                        // requiredChoice: false
                     },
                     {
                         name: 'CustomInput',
-                        id: 'language',
-                        mainText: 'What is your first language?',
-                        preprocess: capitalizeInput,
-                        width: '95%',
+                        id: 'height',
+                        mainText: 'What is your current body height measured in centimeters?',
+                        type: 'int',
+                        hint: '(If you are not sure, please give your best estimate)',
+                        min: 100
+                        // requiredChoice: false
                     },
                     {
                         name: 'CustomInput',
-                        id: 'otherlanguage',
-                        mainText: 'Do you speak other languages? If Yes, ' +
-                            'list them here, otherwise leave empty.',
-                        type: 'list',
-                        hint: '(if <em>English</em> is not your first ' +
-                            'language, list it first; if you speak more ' +
-                            'than one language, separate them with comma)',
-                        width: '95%',
-                        requiredChoice: false
+                        id: 'weight',
+                        mainText: 'What is your current body weight measured in kilograms?',
+                        type: 'int',
+                        hint: '(If you are not sure, please give your best estimate)',
+                        min: 20
+                        // requiredChoice: false
+                    },
+                    {
+                        id: 'background',
+                        selectMultiple: false,
+                        mainText: 'Was one or both of your parents born outside of Germany?',
+                        choices: ['No, both my parents were born in Germany', 'Yes, one of my parents was born outside of Germany',
+                            'Yes, both of my parents were born outside of Germany'],
+                        shuffleChoices: false,
                     },
                 ],
                 formsOptions: {
-                    requiredChoice: true,
+                    requiredChoice: false,
                     shuffleChoices: true
                 },
                 className: 'centered'
@@ -196,55 +248,52 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
     });
 
 
-    stager.extendStep('survey-demo2', {
+    stager.extendStep('social media', {
         widget: {
             name: 'ChoiceManager',
             options: {
                 id: 'demo2',
-                mainText: 'Your demographics.',
+                mainText: 'Leisure activities and social media use.',
                 simplify: true,
                 forms: [
                     {
-                        id: 'education',
-                        mainText: 'What is your highest education level that you have achieved?',
-                        choices: [
-                            'None', 'Elementary', 'High-School', 'College',
-                            'Grad School'
-                        ],
-                        shuffleChoices: false
+                        name: 'ChoiceTableGroup',
+                        id: 'activity',
+                        mainText: 'How many days in a normal week from Monday to Sunday do you engage in the following activities?',
+                        items: ['Self-care activities', 'Doing sports', 'Shopping', 'Meeting friends', 'Spending quality time with family members', 'Actively engaging in a hobby', 'Watching or streaming movies, series etc.', 'Reading', 'Playing video games'],
+                        choices: ['every day', '5-6 days', '3-4 days', '1-2 days', 'never'],
+                        shuffleItems: false,
                     },
                     {
-                        id: 'employment',
-                        mainText: 'What is your employment status?',
-                        choices: [
-                            'Unemployed', 'Self-employed', 'Employed',
-                            'Retired'
-                        ]
+                        name: 'ChoiceTableGroup',
+                        id: 'socialmedia1',
+                        mainText: 'How many hours on a normal day between Monday and Friday do you spend using these social media platforms?',
+                        hint: '(Think about all devices you use i.e., your phone, tablet, computer etc.)',
+                        items: ['Instagram', 'Tik Tok', 'Facebook', 'Youtube', 'Snapchat'],
+                        choices: ['less than 1 hour', 'between 1 and 2 hours', 'between 3 and 4 hours', 'more than 5 hours', 'I do not use it at all'],
+                        shuffleItems: false,
                     },
                     {
-                        id: 'hardship',
-                        mainText: 'Hardship is a condition that causes ' +
-                            'difficulty or suffering. In the course ' +
-                            'of your life, would you say ' +
-                            'that you have experienced hardship?',
-                        hint: '(Examples are being ' +
-                            'without a job or enough money)',
-                        choices: ['Yes', 'No', 'Prefer not to answer'],
-                        // requiredChoice: false
+                        name: 'ChoiceTableGroup',
+                        id: 'socialmedia2',
+                        mainText: 'Now focusing on the weekend (Saturday and Sunday): how many hours do you spend using these social media platforms?',
+                        hint: '(Think about all devices you use i.e., your phone, tablet, computer etc.)',
+                        items: ['Instagram', 'Tik Tok', 'Facebook', 'Youtube', 'Snapchat'],
+                        choices: ['less than 1 hour', 'between 1 and 2 hours', 'between 3 and 4 hours', 'more than 5 hours', 'I do not use it at all'],
+                        shuffleItems: false,
                     },
                     {
-                        id: 'socialmedia',
-                        mainText: 'Do you spend time on social media?',
-                        choices: [
-                            'I am a very active user',
-                            'I am a somewhat active user',
-                            'I rarely use them',
-                            'I never use them'
-                        ]
-                    }
+                        name: 'ChoiceTableGroup',
+                        id: 'socialmedia3',
+                        mainText: 'If you think about each of these platforms, which of these options describe the manner in which you use them the most accurately?',
+                        hint: '(Think about all devices you use i.e., your phone, tablet, computer etc.)',
+                        items: ['Instagram', 'Tik Tok', 'Facebook', 'Youtube', 'Snapchat'],
+                        choices: ['I actively share content on a regular basis', 'I seldom share content', 'I just browse through without sharing any content', 'I do not use it at all'],
+                        shuffleItems: false,
+                    },
                 ],
                 formsOptions: {
-                    requiredChoice: true,
+                    requiredChoice: false,
                     shuffleChoices: true
                 },
                 className: 'centered'
@@ -252,363 +301,31 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('survey-finance', {
+    stager.extendStep('body image', {
         widget: {
             name: 'ChoiceManager',
             options: {
                 id: 'demo3',
-                mainText: 'Job, and finances.',
+                mainText: 'Questions about your body image.',
                 simplify: true,
                 forms: [
                     {
-                        id: 'employment',
-                        mainText: 'What is your employment status?',
-                        choices: [
-                            'Unemployed', 'Self-employed', 'Employed',
-                            'Retired'
-                        ]
-                    },
-                    {
-                        id: 'ownhouse',
-                        mainText: 'Do you own a house or an apartment?',
-                        choices: [
-                            'Yes', 'No',
-                        ],
-                        shuffleChoices: false
-                    },
-                    {
-                        id: 'owncar',
-                        mainText: 'Do you own a car?',
-                        choices: [
-                            'Yes', 'No',
-                        ],
-                        shuffleChoices: false
-                    },
-                    {
-                        id: 'income',
-                        mainText: 'What number come closest to your ' +
-                            'yearly income?',
-                        hint: '(in thousands of dollars)',
-                        choices: [0, 5]
-                            .concat(J.seq(10, 100, 10))
-                            .concat(J.seq(120, 200, 20))
-                            .concat(J.seq(250, 500, 50))
-                            .concat(['500+']),
-                        shuffleChoices: false,
-                        choicesSetSize: 8
-                    },
-                    {
-                        id: 'studentdebt',
-                        mainText: 'Do you have a student debt?',
-                        choices: [
-                            'Yes, and it is large',
-                            'Yes, but it is manageable',
-                            'No, I have paid it off',
-                            'No, I never had it'
-                        ],
-                        shuffleChoices: false
-                    },
-                    {
                         name: 'ChoiceTableGroup',
-                        id: 'incomeclass',
-                        mainText: 'To which social class do you feel ' +
-                            'you belong?',
-                        hint: '(If unsure, make your best guess)',
-                        choices: [
-                            'Bottom', 'Lower', 'Lower-Middle',
-                            'Middle',
-                            'Upper-Middle', 'Upper', 'Elite'
-                        ],
-                        items: [
-                            {
-                                id: 'now',
-                                left: 'Now'
-                            },
-                            {
-                                id: 'child',
-                                left: 'As a child'
-                            },
-                            {
-                                id: 'future',
-                                left: 'In the future'
-                            }
-                        ],
-                        shuffleChoices: false
-                    }
+                        id: 'bodyimage',
+                        mainText: 'Please indicate whether the statement is true about you never, seldom, sometimes, often, or always.',
+                        items: ['I respect my body.', 'I feel good about my body.', 'I feel that my body has at least some good qualities.', 'I take a positive attitude towards my body.', 'I am attentive to my body\'s needs.', 'I feel love for my body.', 'I appreciate the different and unique characteristics of my body.', 'My behavior reveals my positive attitude toward my body, e.g. I hold my head high and smile.', 'I am comfortable in my body.', 'I feel like I am beautiful even if I am different from media images of attractive people.'],
+                        choices: ['never = 1', 'seldom = 2', 'sometimes = 3', 'often = 4', 'always = 5'],
+                        shuffleItems: false,
+                    },
+                  
+                   
                 ],
                 formsOptions: {
-                    requiredChoice: true,
-                    shuffleChoices: true
+                    requiredChoice: false,
+                    shuffleChoices: false
                 },
                 className: 'centered'
             }
-        }
-    });
-
-    stager.extendStep('survey-inequality', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'pol',
-            options: {
-                mainText: 'Your ' +
-                    'perception of socio-economic inequality in the US.',
-                simplify: true,
-                    forms: [
-                    {
-                        id: 'ineqprob',
-                        mainText: 'Do you think inequality is a serious ' +
-                            'problem in America?',
-                        choices: [
-                            'Not a problem<br/>at all',
-                            'A small<br/>problem',
-                            'A problem',
-                            'A serious problem',
-                            'A very serious problem'
-                        ],
-                        choicesSetSize: 7
-                    },
-                    {
-                        name: 'ChoiceTableGroup',
-                        id: 'ineq_source_internal',
-                        choices: J.seq(1, 7),
-                        mainText: 'Express your agreement ' +
-                            'on a scale from 1 to 7, where 1 means ' +
-                            'complete disagreement and 7 complete agreement, ' +
-                            'with the following statements.<br/><br/>' +
-                            'Socio-economic inequality in the US is mainly ' +
-                            'caused by:<br/><br/>' +
-                            'Personal Factors:',
-                        items: [
-                            {
-                                id: 'talent',
-                                left: 'Some people are more talented'
-                            },
-                            {
-                                id: 'workhard',
-                                left: 'Some people work harder'
-                            },
-                            {
-                                id: 'easierjobs',
-                                left: 'Some people prefer easier, ' +
-                                    'low-paying jobs'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'ChoiceTableGroup',
-                        id: 'ineq_source_economic',
-                        choices: J.seq(1, 7),
-                        mainText: 'Economic Factors:',
-                        items: [
-                            {
-                                id: 'globalization',
-                                left: 'Globalization has squeezed the salary' +
-                                    '<br/>of lower-income families'
-                            },
-                            {
-                                id: 'techchange',
-                                left: 'Technological change has raised<br/> ' +
-                                    'the salary of highly-educated workers'
-                            },
-                            {
-                                id: 'finance',
-                                left: 'Salaries of people working in<br/>' +
-                                    'financial sector are driving inequality'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'ChoiceTableGroup',
-                        id: 'ineq_source_political',
-                        choices: J.seq(1, 7),
-                        mainText: 'Political Factors:',
-                        items: [
-                            {
-                                id: 'lobbies',
-                                left: 'Interests lobbies in Washington'
-                            },
-                            {
-                                id: 'minorities',
-                                left: 'Discrimination against some minorities'
-                            },
-                            {
-                                id: 'restricted_edu',
-                                left: 'Restricted access to high-quality ' +
-                                    'education'
-                            },
-                            {
-                                id: 'policies',
-                                left: 'Social policies in favor of workers ' +
-                                    'and unions<br/>have been removed by ' +
-                                    'politicians'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'ChoiceTableGroup',
-                        id: 'ineq_source_luck',
-                        choices: J.seq(1, 7),
-                        mainText: 'Luck:',
-                        items: [
-                            {
-                                id: 'family',
-                                left: 'Family one is born into'
-                            },
-                            {
-                                id: 'luck',
-                                left: 'Other external events'
-                            }
-                        ]
-                    },
-                ],
-                formsOptions: {
-                    requiredChoice: true,
-                    // shuffleChoices: true
-                },
-                className: 'centered'
-            }
-        }
-    });
-
-    stager.extendStep('survey-politics', {
-        widget: {
-            name: 'ChoiceManager',
-            id: 'pol2',
-            options: {
-                mainText: 'Political knowledge questions.',
-                simplify: true,
-                forms: [
-                    {
-                        id: 'speaker',
-                        mainText: 'Who is the current speaker of' +
-                            ' the US House of Representatives?',
-                        choices: [
-                            'Nancy Pelosi',
-                            'Mitch McConnell',
-                            'Chuck Schumer',
-                            'Paul Ryan',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 0
-                    },
-                    {
-                        id: 'houseTerm',
-                        mainText: 'How long is a complete term for' +
-                            ' a member of the US House of Representatives?',
-                        choices: [
-                            '2 years',
-                            '4 years',
-                            '6 years',
-                            '8 years',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 0
-                    },
-                    {
-                        id: 'senateTerm',
-                        mainText: 'How long is a complete term for' +
-                            ' a member of the US Senate?',
-                        choices: [
-                            '2 years',
-                            '4 years',
-                            '6 years',
-                            '8 years',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 2
-                    },
-                    {
-                        id: 'medicare',
-                        mainText: 'What is Medicare?',
-                        choices: [
-                            'A program run by state governments to provide' +
-                            ' health care to poor people',
-                            'A private health insurance' +
-                            ' plan sold to individuals in all 50 states',
-                            'A program run by the US federal government to pay' +
-                            ' for old people’s health care',
-                            'A private, non-profit organization' +
-                            ' that runs free health clinics',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 2
-                    },
-                    {
-                        id: 'veto',
-                        mainText: 'How much of a majority is required for' +
-                            ' the US Senate and US House to override' +
-                            ' a presidential veto?',
-                        choices: [
-                            'One-half',
-                            'Two-thirds',
-                            'Three-fourths',
-                            'Three-fifths',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 1
-                    },
-                    {
-                        id: 'minWage',
-                        mainText: 'What is the federal minimum wage today?',
-                        choices: [
-                            '$5.25',
-                            '$7.25',
-                            '$10.50',
-                            '$12.50',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 1
-                    },
-                    {
-                        id: 'infRate',
-                        mainText: 'Is the national inflation rate as reported' +
-                            ' by the government currently closest to…',
-                        choices: [
-                            '1%',
-                            '6%',
-                            '10%',
-                            '15%',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 1
-                    },
-                    {
-                        id: 'primeMinister',
-                        mainText: 'Who is the prime minister of Great Britain?',
-                        choices: [
-                            'Scott Morrison',
-                            'Justin Trudeau',
-                            'Angela Merkel',
-                            'Boris Johnson',
-                            'I don\'t know'
-                        ],
-                        // correctChoice: 3
-                    },
-
-                ],
-                formsOptions: {
-                    shuffleChoices: true
-                },
-                className: 'centered'
-            }
-        }
-    });
-
-    stager.extendStep('group_malleability', {
-        widget: {
-            name: 'GroupMalleability',
-            title: false,
-            panel: false
-        }
-    });
-
-
-    stager.extendStep('sdo', {
-        name: 'Perception of Groups',
-        widget: {
-            name: 'SDO',
-            title: false,
-            panel: false
         }
     });
 
@@ -616,8 +333,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         widget: {
             name: 'EndScreen',
             options: {
-                feedback: true,
-                email: true
+                feedback: false,
+                email: false
             }
         },
         init: function () {

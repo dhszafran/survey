@@ -13,14 +13,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
      stager
         .next('consent')
-        .next('instructions')
-        .next('survey-demo1')
-        .next('survey-demo2')
-        .next('survey-finance')
-        .next('survey-inequality')
-        .next('survey-politics')
-        .next('sdo')
-        .next('group_malleability')
+        .next('introduction')
+        .next('sociodemographics')
+        .next('social media')
+        .next('body image')
         .next('end')
         .gameover();
 

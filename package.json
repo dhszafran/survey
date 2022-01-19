@@ -6,7 +6,7 @@
     "license": "MIT/X11",
     "homepage": "http://nodegame.org",
     "card": {
-      "description": "A simple survey with focus on inequality",
+      "description": "Survey about social media use among German adolescents",
       "url": "https://github.com/nodegame/survey",
       "icon": "content_paste"
     }

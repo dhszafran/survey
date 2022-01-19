@@ -306,7 +306,7 @@ module.exports = {
      *
      * @see WaitingRoom.dispatch
      */
-    // PING_BEFORE_DISPATCH: true,
+    // PING_BEFORE_DISPATCH: TRUE,
 
     /**
      * ## PING_MAX_REPLY_TIME (number > 0) Optional
@@ -479,7 +479,7 @@ module.exports = {
      *
      * A button is added to the interface.
      */
-    // ALLOW_PLAY_WITH_BOTS: true,
+    ALLOW_PLAY_WITH_BOTS: true,
 
     /** ### ALLOW_SELECT_TREATMENT
      *
@@ -489,6 +489,6 @@ module.exports = {
      *
      * A button is added to the interface.
      */
-    // ALLOW_SELECT_TREATMENT: true
+    ALLOW_SELECT_TREATMENT: true
 
 };

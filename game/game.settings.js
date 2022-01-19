@@ -43,15 +43,15 @@ module.exports = {
      */
     CONSENT: {
 
-        EXP_TITLE: 'Learning How To Create Surveys in NodeGame',
+        EXP_TITLE: 'Self-image Survey',
 
-        EXP_PURPOSE: 'The purpose of the study is to show you how to create surveys in nodeGame.',
+        EXP_PURPOSE: 'This study is intended to facilitate the exploration of a potential relationship between body self-perception and social media use.',
 
-        EXP_DESCR: 'You will complete an online survey in which you will be asked a few questions. That is what surveys do, right?',
+        EXP_DESCR: 'You will answer various questions from three areas: first about your socio-demographics, second about your leisure time and social media use, and third about your body self-perception.',
 
-        EXP_TIME: '20',
+        EXP_TIME: '15'
 
-        EXP_MONEY: '$' + basePay + ' USD'
+        
       },
 
       BASE_PAY: basePay,
@@ -75,13 +75,14 @@ module.exports = {
     treatments: {
 
         standard: {
-            description: "Standard Treatment"
-        }
+            description: "Self-image Survey",
+            text: 'Self-image Survey'
+        },
 
-        //pressure: {
-            //description: "Short times to take decisions",
-            //guess: 5000
-        //}
+        info: {
+            description: "A simple information treatment",
+            text: 'The INFORMATION treatment'
+        }
 
     }
 };
