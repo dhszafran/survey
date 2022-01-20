@@ -260,7 +260,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         name: 'ChoiceTableGroup',
                         id: 'activity',
                         mainText: 'How many days in a normal week from Monday to Sunday do you engage in the following activities?',
-                        items: ['Self-care activities', 'Doing sports', 'Shopping', 'Meeting friends', 'Spending quality time with family members', 'Actively engaging in a hobby', 'Watching or streaming movies, series etc.', 'Reading', 'Playing video games'],
+                        items: ['Taking care of or playing with animals', 'Self-care activities', 'Doing sports', 'Shopping', 'Meeting friends', 'Spending quality time with family members', 'Actively engaging in a hobby', 'Watching or streaming movies, series etc.', 'Reading', 'Playing video games'],
                         choices: ['every day', '5-6 days', '3-4 days', '1-2 days', 'never'],
                         shuffleItems: false,
                     },
@@ -317,7 +317,19 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         choices: ['never = 1', 'seldom = 2', 'sometimes = 3', 'often = 4', 'always = 5'],
                         shuffleItems: false,
                     },
-                  
+                    {
+                        var root = document.body;
+                        var slider = node.widgets.append('Slider', root, {
+                         id: 'myslider',
+                         initialValue: 25,
+                         displayValue: false,
+                         mainText: 'Move the slider to position 89',
+                             hint: 'Be precise!',
+                         required: true,
+                             onmove: function(value, diff) {
+                             console.log('Slider moved to ' + value + ' from ' + (value - diff));
+                    }
+                    }
                    
                 ],
                 formsOptions: {
