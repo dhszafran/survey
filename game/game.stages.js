@@ -17,8 +17,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         .next('sociodemographics')
         .next('social media')
         .next('body image')
-        .next('end')
-        .gameover();
+        .next('outro');
 
     // Notice: here all stages have one step named after the stage.
 

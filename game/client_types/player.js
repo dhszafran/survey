@@ -150,7 +150,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     }, 
                 ],
                 formsOptions: {
-                    requiredChoice: false,
+                    requiredChoice: true,
                     shuffleChoices: false
                 },
                 className: 'centered'
@@ -239,7 +239,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     },
                 ],
                 formsOptions: {
-                    requiredChoice: false,
+                    requiredChoice: true,
                     shuffleChoices: true
                 },
                 className: 'centered'
@@ -293,7 +293,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     },
                 ],
                 formsOptions: {
-                    requiredChoice: false,
+                    requiredChoice: true,
                     shuffleChoices: true
                 },
                 className: 'centered'
@@ -318,22 +318,17 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         shuffleItems: false,
                     },
                     {
-                        var root = document.body;
-                        var slider = node.widgets.append('Slider', root, {
-                         id: 'myslider',
-                         initialValue: 25,
-                         displayValue: false,
-                         mainText: 'Move the slider to position 89',
-                             hint: 'Be precise!',
-                         required: true,
-                             onmove: function(value, diff) {
-                             console.log('Slider moved to ' + value + ' from ' + (value - diff));
-                    }
-                    }
-                   
+                        id: 'bodyimage2',
+                        selectMultiple: false,
+                        mainText: 'Do you believe you are...',
+                        hint: 'Please choose what applies most to you.',
+                        choices: ['far too thin?', 'too thin?',
+                            'just the right weight?', 'too fat?',
+                            'far too fat?'],
+                    },
                 ],
                 formsOptions: {
-                    requiredChoice: false,
+                    requiredChoice: true,
                     shuffleChoices: false
                 },
                 className: 'centered'
@@ -341,18 +336,18 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('end', {
-        widget: {
-            name: 'EndScreen',
-            options: {
-                feedback: false,
-                email: false
-            }
-        },
-        init: function () {
-            node.say('end');
-            node.game.doneButton.destroy();
-            node.game.backButton.destroy();
+    stager.extendStep('outro', {
+        backbutton: false,
+        cb: function () {
+            var s;
+            // Note: we need to specify node.game.settings,
+            // and not simply settings, because this code is
+            // executed on the client.
+            s = node.game.settings;
+            W.setInnerHTML('coins', s.COINS);
+            W.setInnerHTML('time', s.CONSENT.EXP_TIME);
+
+            W.setInnerHTML('treatment', s.text);
         }
     });
 };
