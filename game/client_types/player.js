@@ -325,9 +325,9 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                     {
                         name: 'ChoiceTableGroup',
                         id: 'bodyimagefriends',
-                        mainText: 'Please indicate whether the question is true about your friends never, seldom, sometimes, often, or always.',
-                        items: ['How important are weight and shape to your friends?', 'Compared to other things in their lives, how important do you think your friends\' body weight and shape are to them?', 'How important do you think it is to your friends that your weight stay the same as it is now?', 'How important do you think it is to other girls at school that your weight stay the same as it is now?', 'How often do your friends encourage you to lose weight?', 'How often do your friends comment on each other\'s weight?', 'How often do your friends encourage each other to lose weight?', 'How often do your friends diet?', 'How often do your friends worry about their weight?', 'How often do your friends worry about what they eat?', 'How often do your friends skip meals?', 'Do you think that your friends take a lot of notice of each others\' weight and shape?'],
-                        choices: ['never = 1', 'seldom = 2', 'sometimes = 3', 'often = 4', 'always = 5'],
+                        mainText: 'Please indicate to what extent the statement is true about you and your friends.',
+                        items: ['Do your friends influence your idea of the perfect body?', 'Do your friends influence you to use diet products?', 'Do your friends influence you to exercise to tone up?', 'Do your friends influence your ideas on how to get a perfect body?', 'Do your friends influence your diet to lose weight?'],
+                        choices: ['not at all true = 1', 'not very true = 2', 'neither true nor false = 3', 'fairly true = 4', 'very true = 5'],
                         shuffleItems: false,
                     },
                     {
