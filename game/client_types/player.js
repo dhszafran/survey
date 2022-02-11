@@ -180,7 +180,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         id: 'byear',
                         mainText: 'Which year were you born in?',
                         type: 'int',
-                        hint: '(Please insert in YYYY format)'
+                        hint: '(Please insert in YYYY format)',
+                        shuffleChoices: false,
                         // requiredChoice: false
                     },
                     {
@@ -191,6 +192,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         hint: '(Please insert in MM format)',
                         min: 1,
                         max: 12,
+                        shuffleChoices: false,
                         // requiredChoice: false
                     },
                     {
@@ -208,7 +210,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         type: 'int',
                         hint: '(Please insert the right number)',
                         min: 5,
-                        max: 13
+                        max: 13,
+                        shuffleChoices: false,
                         // requiredChoice: false
                     },
                     {
@@ -217,7 +220,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         mainText: 'What is your current body height measured in centimeters?',
                         type: 'int',
                         hint: '(If you are not sure, please give your best estimate)',
-                        min: 100
+                        min: 100,
+                        shuffleChoices: false,
                         // requiredChoice: false
                     },
                     {
@@ -226,7 +230,8 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                         mainText: 'What is your current body weight measured in kilograms?',
                         type: 'int',
                         hint: '(If you are not sure, please give your best estimate)',
-                        min: 20
+                        min: 20,
+                        shuffleChoices: false,
                         // requiredChoice: false
                     },
                     {
@@ -240,7 +245,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 ],
                 formsOptions: {
                     requiredChoice: true,
-                    shuffleChoices: true
+                    shuffleChoices: false
                 },
                 className: 'centered'
             }
@@ -294,7 +299,7 @@ module.exports = function (treatmentName, settings, stager, setup, gameRoom) {
                 ],
                 formsOptions: {
                     requiredChoice: true,
-                    shuffleChoices: true
+                    shuffleChoices: false
                 },
                 className: 'centered'
             }
